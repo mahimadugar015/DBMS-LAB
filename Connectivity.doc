@@ -1,0 +1,82 @@
+Prerequisites: 
+1.	Install python
+2.	Install pip
+3.	Pip install pyodbc
+4.	 
+import pyodbc
+connection = pyodbc.connect(
+    "DSN=dsn;"        +  
+    "UID=raju;"            +   
+    "PWD=a"          
+)
+
+cursor = connection.cursor()
+cursor.execute("SELECT * FROM st_info")
+rows = cursor.fetchall()
+print("==============================")
+print("      ST_INFO TABLE DATA      ")
+print("==============================")
+print(f"{'PRN':<10} {'NAME':<15} {'RESULT':<10}")
+print("------------------------------")
+for row in rows:
+    print(f"{row[0]:<10} {row[1]:<15} {row[2]:<10}")
+print("==============================")
+cursor.close()
+connection.close()
+print("Connection Closed Successfully")
+Run: python filename.py
+
+
+Prerequisites: 
+1.	Install java
+2.	Download ojdbc8.jar and keep it in working folder
+
+import java.sql.*;
+
+public class DisplayData {
+    public static void main(String[] args) {
+        try {
+            // Load Oracle JDBC Driver
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+
+            // Establish connection
+            Connection con = DriverManager.getConnection(
+                "jdbc:oracle:thin:@localhost:1521:orcl",
+                "raju",
+                "a"
+            );
+
+            // Create statement
+            Statement stmt = con.createStatement();
+
+            // Execute query
+            ResultSet rs = stmt.executeQuery("SELECT * FROM st_info");
+
+            // Header
+            System.out.println("==============================");
+            System.out.println("      ST_INFO TABLE DATA");
+            System.out.println("==============================");
+            System.out.printf("%-12s %-18s %-10s\n", "PRN", "NAME", "RESULT");
+            System.out.println("------------------------------");
+
+            // Data
+            while (rs.next()) {
+                System.out.printf("%-12d %-18s %-10d\n",
+                    rs.getInt(1),
+                    rs.getString(2),
+                    rs.getInt(3)
+                );
+            }
+
+            System.out.println("==============================");
+
+            con.close();
+            System.out.println("Connection Closed Successfully");
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+}
+Compile: javac -cp ".;ojdbc8.jar" filename.java
+Run: java -cp ".;ojdbc8.jar" filename
